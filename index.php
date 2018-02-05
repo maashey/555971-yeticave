@@ -67,7 +67,7 @@ $items[]= item_to_arr('Маска Oakley Canopy','Разное',5400 ,'img/lot-6
                  </li>
              </ul>
          <? } ?>
-
+          
         </nav>
     </div>
 </header>
