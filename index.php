@@ -24,6 +24,17 @@ $items[]= item_to_arr('Ботинки для сноуборда DC Mutiny Charoc
 $items[]= item_to_arr('Куртка для сноуборда DC Mutiny Charocal','Одежда', 7500,'img/lot-5.jpg');
 $items[]= item_to_arr('Маска Oakley Canopy','Разное',5400 ,'img/lot-6.jpg');
 
+//форматирование вывода цены 
+function format_price($price) {
+    $result=floatval($price); //переводим в число на всякий случай
+    $result=ceil($result); //округляем до целого
+    if ($result >= 1000) {
+        $result= number_format($result, 0, '', ' ');
+    }
+    $result=strval($result). ' Р';
+    return $result;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -113,7 +124,7 @@ $items[]= item_to_arr('Маска Oakley Canopy','Разное',5400 ,'img/lot-6
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= number_format($item['price'], 0, '', ' ') ; ?><b class="rub">р</b></span>
+                                    <span class="lot__cost"><?= format_price($item['price']) ; ?></span>
                                 </div>
                                 <div class="lot__timer timer">
 
