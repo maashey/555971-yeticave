@@ -28,10 +28,8 @@ $items[]= item_to_arr('Маска Oakley Canopy','Разное',5400 ,'img/lot-6
 function format_price($price) {
     $result=floatval($price); //переводим в число на всякий случай
     $result=ceil($result); //округляем до целого
-    if ($result >= 1000) {
-        $result= number_format($result, 0, '', ' ');
-    }
-    $result=strval($result). ' Р';
+    $result= number_format($result, 0, '', ' ');
+    //$result.= ' &#8381;'; //знак рубля у меня в браузере не работает. Знак подставляется картинкой в вёрстке lot__cost
     return $result;
 }
 
@@ -124,7 +122,7 @@ function format_price($price) {
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= format_price($item['price']) ; ?></span>
+                                    <span class="lot__cost"><?= format_price($item['price']) ; ?><b class="rub">р</b></span>
                                 </div>
                                 <div class="lot__timer timer">
 
