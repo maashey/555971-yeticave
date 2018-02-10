@@ -25,6 +25,6 @@ function render_template($template_path, $vars)
     }
     extract($vars); // extract делает из массива набор переменных в локальной области видимости
     ob_start();  //Включение буферизации вывода
-    include($template_path); //переменные из extract будут видны внутри подключаемого файла
+    require_once($template_path); //переменные из extract будут видны внутри подключаемого файла
     return ob_get_clean();  //возвращаем буфер и очищаем
 }
