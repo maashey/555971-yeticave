@@ -28,3 +28,9 @@ function render_template($template_path, $vars)
     require_once($template_path); //переменные из extract будут видны внутри подключаемого файла
     return ob_get_clean();  //возвращаем буфер и очищаем
 }
+
+//фильтрация данных 
+function esc($str) {
+	$text = htmlspecialchars($str);
+	return $text;
+}
