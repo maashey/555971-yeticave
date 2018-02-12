@@ -14,7 +14,7 @@ $till_tomorrow['hours'] = floor($hours);
 $till_tomorrow['minutes'] = floor(($hours - $till_tomorrow['hours'])*60);
 $expiration = $till_tomorrow['hours'].':'.$till_tomorrow['minutes'];
 
-$page_content = render_template('templates/index.php', ['items' => $items, 'expiration' => $expiration]);
+$page_content = render_template('templates/index.php', ['lots' => $lots, 'expiration' => $expiration]);
 $layout_content = render_template('templates/layout.php', [
     'content' => $page_content,
     'categories' => $categories,
