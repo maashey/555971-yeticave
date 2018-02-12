@@ -29,7 +29,7 @@
     <ul class="lots__list">
         <? foreach($items as $item) { ?>
                 <li class="lots__item lot">
-                    <div class="lot__image">0
+                    <div class="lot__image">
                         <img src="<?= $item['img']; ?>" width="350" height="260" alt="<?= esc($item['name']); ?>">
                     </div>
                     <div class="lot__info">
@@ -41,7 +41,7 @@
                                 <span class="lot__cost"><?= format_price($item['price']) ; ?><b class="rub">р</b></span>
                             </div>
                             <div class="lot__timer timer">
-
+                                <?= $expiration; ?>
                             </div>
                         </div>
                     </div>
