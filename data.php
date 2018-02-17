@@ -23,3 +23,10 @@ $lots[]= item_to_arr('Крепления Union Contact Pro 2015 года раз�
 $lots[]= item_to_arr('Ботинки для сноуборда DC Mutiny Charocal','Ботинки', 10999,'img/lot-4.jpg');
 $lots[]= item_to_arr('Куртка для сноуборда DC Mutiny Charocal','Одежда', 7500,'img/lot-5.jpg');
 $lots[]= item_to_arr('Маска Oakley Canopy','Разное',5400 ,'img/lot-6.jpg');
+
+
+$tomorrow = strtotime('tomorrow') - time();
+$hours = $tomorrow/3600;
+$till_tomorrow['hours'] = floor($hours);
+$till_tomorrow['minutes'] = floor(($hours - $till_tomorrow['hours'])*60);
+$expiration = $till_tomorrow['hours'].':'.$till_tomorrow['minutes'];
