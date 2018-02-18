@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			if (!is_numeric($value)) {
 				$errors[$key] = 'Указывается цифрами';
 			}
+		}
+		elseif($key == "category"){
+			if ($value == 'Выберите категорию') {
+				$errors[$key] = 'Вы не выбрали категорию';
+			}
 		}			
 	}
 
