@@ -23,11 +23,13 @@ function render_template($template_path, $vars)
     if (!is_file($template_path)){  
         $result='';    	
     }
-    extract($vars); // extract делает из массива набор переменных в локальной области видимости
-    ob_start();  //Включение буферизации вывода
-    require_once($template_path); //переменные из extract будут видны внутри подключаемого файла
-    $result = ob_get_clean();  //возвращаем буфер и очищаем
-    return $result;
+    else{
+	    extract($vars); // extract делает из массива набор переменных в локальной области видимости
+	    ob_start();  //Включение буферизации вывода
+	    require_once($template_path); //переменные из extract будут видны внутри подключаемого файла
+	    $result = ob_get_clean();  //возвращаем буфер и очищаем
+	  } 
+	    return $result;
 }
 
 //фильтрация данных 
