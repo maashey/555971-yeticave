@@ -1,8 +1,8 @@
 <?php
 
 //записываем в ассоциативный массив данные объявления
-function item_to_arr($name, $cat, $price, $img) {
-    return array('name'=> $name, 'category'=> $cat, 'price'=> $price, 'img'=> $img);
+function item_to_arr($id, $name, $cat, $price, $img) {
+    return array('id'=> $id,'name'=> $name, 'category'=> $cat, 'price'=> $price, 'img'=> $img);
 }
 
 
@@ -34,4 +34,17 @@ function render_template($template_path, $vars)
 function esc($str) {
 	$text = htmlspecialchars($str);
 	return $text;
+}
+
+//оборачивание контента в layout и вывод на экран
+function render_page($content, $title, $categories, $is_auth, $user_name, $user_avatar){
+	$page = render_template('templates/layout.php', [
+    'content' => $content,
+    'categories' => $categories,
+    'title' => $title,
+    'is_auth' => $is_auth,
+    'user_name' => $user_name,
+    'user_avatar' => $user_avatar
+	]);
+	print($page);
 }
