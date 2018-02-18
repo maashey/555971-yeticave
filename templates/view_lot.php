@@ -26,10 +26,10 @@
       <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
-            <img src="img/lot-image.jpg" width="730" height="548" alt="Сноуборд">
+            <img src="<?= $lot['img']; ?>" width="730" height="548" alt="<?= esc($lot['name']); ?>">
           </div>
           <p class="lot-item__category">Категория: <span><?= $lot['category']; ?></span></p>
-          <p class="lot-item__description">тут должно быть описание, но его нет</p>
+          <p class="lot-item__description"><?= esc($lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
           <div class="lot-item__state">
@@ -53,18 +53,20 @@
               <button type="submit" class="button">Сделать ставку</button>
             </form>
           </div>
-          <div class="history">
-            <h3>История ставок (<span><?=count($bets); ?></span>)</h3>
-            <table class="history__list">
-              <? foreach ($bets as $bet) { ?>
-                <tr class="history__item">
-                  <td class="history__name"><?= $bet['name']; ?></td>
-                  <td class="history__price"><?= format_price($bet['price']). 'р'; ?></td>
-                  <td class="history__time"><?= date("m.d.y \в H:i",$bet['ts'] ); ?></td>
-                </tr>
-              <? } ?>
-            </table>
-          </div>
+          <?php if (isset($bets)): ?>
+            <div class="history">
+              <h3>История ставок (<span><?=count($bets); ?></span>)</h3>
+              <table class="history__list">
+                <? foreach ($bets as $bet) { ?>
+                  <tr class="history__item">
+                    <td class="history__name"><?= $bet['name']; ?></td>
+                    <td class="history__price"><?= format_price($bet['price']). 'р'; ?></td>
+                    <td class="history__time"><?= date("d.m.y \в H:i",$bet['ts'] ); ?></td>
+                  </tr>
+                <? } ?>
+              </table>
+            </div>
+          <?php endif; ?>  
         </div>
       </div>
     <?php else: ?>
