@@ -8,13 +8,6 @@ require_once('data.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 	$lot = $_POST;
-	// $lot['name'] = $_POST['name'] ?? '';
-	// $lot['description'] = $_POST['description'] ?? '';
-	// $lot['category'] = $_POST['category'] ?? '';
-	// $lot['step'] = $_POST['step'] ?? '';
-	// $lot['price'] = $_POST['price'] ?? '';
-	// $lot['expiration'] = $_POST['expiration'] ?? '';
-	
 
 	$required = ['name', 'description', 'price', 'step', 'category', 'expiration'];
 	$dict = ['name' => 'Наименование', 'description' => 'Описание', 'img' => 'Фото лота', 'price' => 'Начальная цена', 'step' => 'Шаг ставки',  'category' => 'Категория', 'expiration'=> 'Дата окончания торгов'];
@@ -27,25 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 	foreach ($_POST as $key => $value) {
 		if ($key == "price") {
-			if (!is_numeric($value)) {
+			if (!is_numeric($value) && $errors[$key] != 'Поле не заполнено') {
 				$errors[$key] = 'Указывается цифрами';
 			}
 		}
-		elseif ($key == "step") {
-			if (!is_numeric($value)) {
+		if ($key == "step") {
+			if (!is_numeric($value) && $errors[$key] != 'Поле не заполнено') {
 				$errors[$key] = 'Указывается цифрами';
 			}
 		}
-		elseif($key == "category"){
+		if($key == "category"){
 			if ($value == 'Выберите категорию') {
 				$errors[$key] = 'Вы не выбрали категорию';
 			}
 		}			
 	}
-
-// echo '<pre>';
-// var_dump($_FILES); 
-// echo '</pre>';
 
 	if (isset($_FILES['img']['name']) && $_FILES['img']['size'] >0 ) {
 		$tmp_name = $_FILES['img']['tmp_name'];
