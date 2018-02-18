@@ -8,6 +8,6 @@ require_once('functions.php');
 require_once('data.php');
 
 
-$content = render_template('templates/view_index.php', ['lots' => $lots, 'expiration' => $expiration]);
+$content = render_template('view_index', ['lots' => $lots, 'expiration' => $expiration]);
 
 render_page($content, 'Главная', $categories, $is_auth, $user_name, $user_avatar);

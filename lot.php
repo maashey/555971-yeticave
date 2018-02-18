@@ -24,6 +24,6 @@ if (!$lot) {
 	http_response_code(404);
 }
 
-$content = render_template('templates/view_lot.php', ['lot' => $lot, 'bets'=> $bets, 'expiration' => $expiration]);
+$content = render_template('view_lot', ['lot' => $lot, 'bets'=> $bets, 'expiration' => $expiration]);
 
 render_page($content, esc($lot['name']), $categories, $is_auth, $user_name, $user_avatar);

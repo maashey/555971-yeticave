@@ -1,8 +1,8 @@
 <?php
 
 //записываем в ассоциативный массив данные объявления
-function item_to_arr($id, $name, $cat, $price, $img) {
-    return array('id'=> $id,'name'=> $name, 'category'=> $cat, 'price'=> $price, 'img'=> $img);
+function item_to_arr($id, $name, $cat, $price, $img, $description) {
+    return array('id'=> $id,'name'=> $name, 'category'=> $cat, 'price'=> $price, 'img'=> $img, 'description'=> $description);
 }
 
 
@@ -17,19 +17,21 @@ function format_price($price) {
 
 
 //функция шаблонизатор
-function render_template($template_path, $vars)
+function render_template($template_name, $vars)
 {
-		//Проверяем, что файл шаблона, переданный в аргументе, существует. Если не существует, то функция вернет пустую строку
-    if (!is_file($template_path)){  
-        $result='';    	
-    }
-    else{
-	    extract($vars); // extract делает из массива набор переменных в локальной области видимости
-	    ob_start();  //Включение буферизации вывода
-	    require_once($template_path); //переменные из extract будут видны внутри подключаемого файла
-	    $result = ob_get_clean();  //возвращаем буфер и очищаем
-	  } 
-	    return $result;
+	$template_path = 'templates/'. $template_name .'.php' ;
+
+	//Проверяем, что файл шаблона, переданный в аргументе, существует. Если не существует, то функция вернет пустую строку
+  if (!is_file($template_path)){  
+      $result='';    	
+  }
+  else{
+    extract($vars); // extract делает из массива набор переменных в локальной области видимости
+    ob_start();  //Включение буферизации вывода
+    require_once($template_path); //переменные из extract будут видны внутри подключаемого файла
+    $result = ob_get_clean();  //возвращаем буфер и очищаем
+  } 
+    return $result;
 }
 
 //фильтрация данных 
@@ -40,7 +42,7 @@ function esc($str) {
 
 //оборачивание контента в layout и вывод на экран
 function render_page($content, $title, $categories, $is_auth, $user_name, $user_avatar){
-	$page = render_template('templates/layout.php', [
+	$page = render_template('layout', [
     'content' => $content,
     'categories' => $categories,
     'title' => $title,
