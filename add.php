@@ -33,7 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			if ($value == 'Выберите категорию') {
 				$errors[$key] = 'Вы не выбрали категорию';
 			}
-		}			
+		}
+		if ($key == "expiration"){
+		    if (strtotime($value) < time()) {
+                $errors[$key] = 'Укажите дату из будущего';
+            }
+        }
 	}
 
 	if (isset($_FILES['img']['name']) && $_FILES['img']['size'] >0 ) {
