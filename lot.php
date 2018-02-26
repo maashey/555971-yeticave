@@ -20,7 +20,7 @@ if (isset($_GET['lot_id'])) {
 	$lot_id = $_GET['lot_id'];
 
     $lot = $lots[$lot_id] ?? null;
-    if(!in_array($lot_id, $visited_lots)) {
+    if(isset($lot) && !in_array($lot_id, $visited_lots)) {
         array_push($visited_lots, $lot_id);
         setcookie('visited_lots', json_encode($visited_lots), strtotime("+30 days"));
     }
