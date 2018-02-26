@@ -5,6 +5,12 @@ error_reporting(E_ALL);
 require_once('functions.php');
 require_once('data.php');
 
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    http_response_code(403);
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 	$lot = $_POST;
@@ -12,31 +18,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	$required = ['name', 'description', 'price', 'step', 'category', 'expiration'];
 	$dict = ['name' => 'Наименование', 'description' => 'Описание', 'img' => 'Фото лота', 'price' => 'Начальная цена', 'step' => 'Шаг ставки',  'category' => 'Категория', 'expiration'=> 'Дата окончания торгов'];
 	$errors = [];
-	foreach ($required as $key) {
-		if (empty($_POST[$key])) {
-            $errors[$key] = 'Поле не заполнено';
+	foreach ($required as $field) {
+		if (empty($lot[$field])) {
+            $errors[$field] = 'Поле не заполнено';
 		}
 	}
 
-	foreach ($_POST as $key => $value) {
-		if ($key == "price") {
-			if (!is_numeric($value) && $errors[$key] != 'Поле не заполнено') {
-				$errors[$key] = 'Указывается цифрами';
+	foreach ($lot as $field => $value) {
+		if ($field == "price") {
+			if (!is_numeric($value) && !isset($errors[$field])) {
+				$errors[$field] = 'Введите число';
 			}
 		}
-		if ($key == "step") {
-			if (!is_numeric($value) && $errors[$key] != 'Поле не заполнено') {
-				$errors[$key] = 'Указывается цифрами';
+		if ($field == "step") {
+			if (!is_numeric($value) && !isset($errors[$field])) {
+				$errors[$field] = 'Введите число';
 			}
 		}
-		if($key == "category"){
+		if($field == "category"){
 			if ($value == 'Выберите категорию') {
-				$errors[$key] = 'Вы не выбрали категорию';
+				$errors[$field] = 'Вы не выбрали категорию';
 			}
 		}
-		if ($key == "expiration"){
-		    if (strtotime($value) < time()) {
-                $errors[$key] = 'Укажите дату из будущего';
+		if ($field == "expiration"){
+		    if (strtotime($value) < time() && !isset($errors[$field])) {
+                $errors[$field] = 'Укажите дату из будущего';
             }
         }
 	}
@@ -75,4 +81,4 @@ else
 	$content = render_template('view_add', ['categories' => $categories ]);
 }
 
-render_page($content, 'Добавление лота', $categories, $is_auth, $user_name, $user_avatar);
+render_page($content, 'Добавление лота', $categories, $user_avatar);

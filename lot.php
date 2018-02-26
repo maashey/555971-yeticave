@@ -1,11 +1,11 @@
 <?php
 ini_set('display_errors', 1);
-error_reporting(E_ALL); 
-
-date_default_timezone_set("Europe/Moscow");
+error_reporting(E_ALL);
 
 require_once('functions.php');
 require_once('data.php');
+
+session_start();
 
 $lot = null;
 
@@ -20,7 +20,7 @@ if (isset($_GET['lot_id'])) {
 	$lot_id = $_GET['lot_id'];
 
     $lot = $lots[$lot_id] ?? null;
-    if(!in_array($lot_id, $visited_lots)) {
+    if(isset($lot) && !in_array($lot_id, $visited_lots)) {
         array_push($visited_lots, $lot_id);
         setcookie('visited_lots', json_encode($visited_lots), strtotime("+30 days"));
     }
@@ -32,4 +32,4 @@ if (!$lot) {
 
 $content = render_template('view_lot', ['lot' => $lot, 'bets' => $bets, 'expiration' => $expiration]);
 
-render_page($content, esc($lot['name']), $categories, $is_auth, $user_name, $user_avatar);
+render_page($content, esc($lot['name']), $categories, $user_avatar);

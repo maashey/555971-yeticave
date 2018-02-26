@@ -32,7 +32,7 @@
                              alt="<?=esc($lot['name']); ?>">
                     </div>
                     <div class="lot__info">
-                        <span class="lot__category"><?=htmlspecialchars($lot['category']); ?></span>
+                        <span class="lot__category"><?=esc($lot['category']); ?></span>
                         <h3 class="lot__title"><a class="text-link" href="lot.php?lot_id=<?=$index; ?>"><?=esc($lot['name']); ?></a></h3>
                         <div class="lot__state">
                             <div class="lot__rate">

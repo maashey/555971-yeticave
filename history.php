@@ -5,6 +5,8 @@ error_reporting(E_ALL);
 require_once('functions.php');
 require_once('data.php');
 
+session_start();
+
 if (isset($_COOKIE['visited_lots'])) {
     $visited_lots = json_decode($_COOKIE['visited_lots']);
 }
@@ -14,4 +16,4 @@ else {
 
 $content =  render_template( 'view_history', ['lots' => $lots, 'expiration' => $expiration, 'visited_lots' => $visited_lots]);
 
-render_page($content, 'История просмотров', $categories, $is_auth, $user_name, $user_avatar);
+render_page($content, 'История просмотров', $categories, $user_avatar);

@@ -41,14 +41,26 @@ function esc($str) {
 }
 
 //оборачивание контента в layout и вывод на экран
-function render_page($content, $title, $categories, $is_auth, $user_name, $user_avatar){
-	$page = render_template('layout', [
-    'content' => $content,
-    'categories' => $categories,
-    'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'user_avatar' => $user_avatar
-	]);
+function render_page($content, $title, $categories, $user_avatar){
+	$page = render_template('layout',
+        [
+            'content' => $content,
+            'categories' => $categories,
+            'title' => $title,
+            'user_avatar' => $user_avatar
+        ]
+    );
 	print($page);
+}
+
+function searchUserByEmail($email, $users) {
+    $result = null;
+    foreach ($users as $user) {
+        if ($user['email'] == $email) {
+            $result = $user;
+            break;
+        }
+    }
+
+    return $result;
 }
