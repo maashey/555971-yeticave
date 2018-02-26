@@ -840,28 +840,25 @@ input:invalid .form__error{
 
 .form__item--invalid .form__error {
   display: block;
-  line-height: 14px;
-  font-size: 12px;
-  margin-top: 5px;
 }
 
 .form__item--invalid textarea,
 .form__item--invalid input {
-  background: #ffffff url("../img/error.svg") 97% 5px no-repeat;
+  background: #ffffff url("../img/error.svg") 97% 11px no-repeat;
   border-color: #f84646;
 }
 
 .form__item--invalid select {
-  background: #ffffff url("../img/error.svg") 322px 5px no-repeat;
+  background: #ffffff url("../img/error.svg") 322px 11px no-repeat;
   border-color: #f84646;
 }
 
 .form__item--small.form__item--invalid input {
-  background: #ffffff url("../img/error.svg") 94% 5px no-repeat;
+  background: #ffffff url("../img/error.svg") 94% 11px no-repeat;
 }
 
 .form__item--wide.form__item--invalid textarea {
-  background: #ffffff url("../img/error.svg") 702px 5px no-repeat;
+  background: #ffffff url("../img/error.svg") 702px 11px no-repeat;
 }
 
 .form__item--file label span {
