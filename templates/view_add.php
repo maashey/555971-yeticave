@@ -110,5 +110,7 @@
         <button type="submit" class="button" name="send">Добавить лот</button>
     </form>
 <?php else: ?>
-    <h1 style="color: black">Залогиньтесь для добавления лота</h1>
+    <div class="container">
+        <h1 style="color: black">Залогиньтесь для добавления лота</h1>
+    </div>
 <?php endif; ?>
