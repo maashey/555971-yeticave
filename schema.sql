@@ -17,7 +17,7 @@ CREATE TABLE users (
   name  CHAR(255) NOT NULL,
   password CHAR(64) NOT NULL,
   avatar_path CHAR(255),
-  contacts TEXT NOT NULL,
+  contacts TEXT,
   UNIQUE INDEX (email)
 );
 
@@ -30,10 +30,10 @@ CREATE TABLE lots (
   price INT UNSIGNED NOT NULL,
   expiration TIMESTAMP NOT NULL,
   price_step INT UNSIGNED NOT NULL,
-  category_id INT,  
-  author_id INT,
+  category_id INT NOT NULL,
+  author_id INT NOT NULL,
   winner_id INT,
-  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,  
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (winner_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
   INDEX (name),
@@ -44,6 +44,7 @@ CREATE TABLE lots (
 CREATE TABLE bets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   sum INT UNSIGNED NOT NULL,
+  dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id INT,
   lot_id INT,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
