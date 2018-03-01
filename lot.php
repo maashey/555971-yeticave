@@ -1,7 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
+require_once('error_reporting.php');
 require_once('functions.php');
 require_once('data.php');
 
@@ -32,4 +30,4 @@ if (!$lot) {
 
 $content = render_template('view_lot', ['lot' => $lot, 'bets' => $bets, 'expiration' => $expiration]);
 
-render_page($content, esc($lot['name']), $categories, $user_avatar);
+render_page($content, esc($lot['name']), $categories );

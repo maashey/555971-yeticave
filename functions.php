@@ -41,13 +41,12 @@ function esc($str) {
 }
 
 //оборачивание контента в layout и вывод на экран
-function render_page($content, $title, $categories, $user_avatar){
+function render_page($content, $title, $categories){
 	$page = render_template('layout',
         [
             'content' => $content,
             'categories' => $categories,
-            'title' => $title,
-            'user_avatar' => $user_avatar
+            'title' => $title
         ]
     );
 	print($page);

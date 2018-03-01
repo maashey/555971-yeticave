@@ -1,43 +1,54 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
+require_once('error_reporting.php');
 require_once('functions.php');
-require_once('data.php');
-require_once('userdata.php');
+require_once('db_connect.php');
 
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
 
+    // Проверка обязательных полей
     $required = ['email', 'password'];
     $errors = [];
     foreach ($required as $field) {
-        if (empty($form[$field])) {
+        if (empty($_POST[$field]) || strlen(trim($_POST[$field])) == 0  ) {
             $errors[$field] = 'Это поле надо заполнить';
         }
     }
+    // Проверка валидности email
     if (!isset($errors['email']) && !filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Email должен быть корректным';
+        $errors['email'] = 'Введите корректный email';
     }
 
-//Аутентификация
-    $user = searchUserByEmail($form['email'], $users);
-    if (isset($user) && !count($errors)) {
-        if (password_verify($form['password'], $user['password'])) {
-            $_SESSION['user'] = $user;
-        }
-        else {
-            $errors['password'] = 'Вы ввели неверный пароль';
+    //Аутентификация
+    if (!count($errors)) {
+        $stmt = db_get_prepare_stmt($db, 'SELECT * FROM users WHERE email = ?', [$_POST['email']]);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        if ($res) {
+            if (mysqli_num_rows($res) > 0) {
+                $user = mysqli_fetch_assoc($res);
+                if (password_verify($form['password'], $user['password'])) {
+                    $_SESSION['user'] = $user;
+                } else {
+                    $errors['password'] = 'Вы ввели неверный пароль';
+                }
+            } else {
+                $errors['email'] = 'Такой пользователь не найден';
+            }
+        } else {
+            $error_db = 'Ошибка БД: ' . mysqli_error($link);
         }
     }
-    elseif (!isset($user)) {
-        $errors['email'] = 'Такой пользователь не найден';
-    }
+
+
 
     if (count($errors)) {
         $content = render_template('view_login', ['form' => $form, 'errors' => $errors]);
+    }
+    else if ($errors['db']) {
+        $page_content = render_template('error', ['error' => $errors['db']]);
     }
     else {
         header("Location: /index.php");
@@ -53,4 +64,4 @@ else {
     }
 }
 
-render_page($content, 'Вход', $categories, $user_avatar);
+render_page($content, 'Вход', $categories );
