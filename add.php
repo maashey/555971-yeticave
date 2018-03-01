@@ -1,7 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL); 
-
+require_once('error_reporting.php');
 require_once('functions.php');
 require_once('data.php');
 
@@ -18,12 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	$required = ['name', 'description', 'price', 'step', 'category', 'expiration'];
 	$dict = ['name' => 'Наименование', 'description' => 'Описание', 'img' => 'Фото лота', 'price' => 'Начальная цена', 'step' => 'Шаг ставки',  'category' => 'Категория', 'expiration'=> 'Дата окончания торгов'];
 	$errors = [];
+
+    // Проверка обязательных полей
 	foreach ($required as $field) {
-		if (empty($lot[$field])) {
+		if (empty($_POST[$field]) || strlen(trim($_POST[$field])) ==0  ) {
             $errors[$field] = 'Поле не заполнено';
 		}
 	}
 
+	//Валидация числовых полей, названия категории и даты
 	foreach ($lot as $field => $value) {
 		if ($field == "price") {
 			if (!is_numeric($value) && !isset($errors[$field])) {
@@ -47,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
 	}
 
+	//Валидация файла
 	if (isset($_FILES['img']['name']) && $_FILES['img']['size'] >0 ) {
 		$tmp_name = $_FILES['img']['tmp_name'];
 		$file_name = $_FILES['img']['name'];
@@ -54,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$file_size = $_FILES['img']['size'];
 		$file_type = mime_content_type($tmp_name);
 
-		if ($file_type !== "image/jpeg") {
-			$errors['img'] = 'Загрузите фото в формате jpg или jpeg';
+		if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
+			$errors['img'] = 'Загрузите фото в формате jpg, jpeg или png';
 		}
 		else if ($file_size > 2097152) {
 			$errors['img'] = 'Максимальный размер файла: 2МБ';
@@ -81,4 +83,4 @@ else
 	$content = render_template('view_add', ['categories' => $categories ]);
 }
 
-render_page($content, 'Добавление лота', $categories, $user_avatar);
+render_page($content, 'Добавление лота', $categories);

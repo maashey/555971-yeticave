@@ -1,6 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL); 
+require_once('error_reporting.php');
 
 date_default_timezone_set("Europe/Moscow");
 
@@ -11,4 +10,4 @@ session_start();
 
 $content = render_template('view_index', ['lots' => $lots, 'expiration' => $expiration]);
 
-render_page($content, 'Главная', $categories, $user_avatar);
+render_page($content, 'Главная', $categories );
