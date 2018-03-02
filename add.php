@@ -48,29 +48,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
 	}
 
-	//Валидация файла
-	if (isset($_FILES['img']['name']) && $_FILES['img']['size'] >0 ) {
-		$tmp_name = $_FILES['img']['tmp_name'];
-		$file_name = $_FILES['img']['name'];
-		$file_path = 'img/'. $file_name;
-		$file_size = $_FILES['img']['size'];
-		$file_type = mime_content_type($tmp_name);
+    //Валидация файла
+    if ( isset($_FILES['img'])) { 
+    	switch ($_FILES['img']['error']) {
+    		case UPLOAD_ERR_OK:
+		        $tmp_name = $_FILES['img']['tmp_name'];
+		        $file_name = $_FILES['img']['name'];
+		        $time = time();
+		        $file_path = 'img/'. $time. '_' . $file_name;
+		        $file_type = mime_content_type($tmp_name);
 
-		if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
-			$errors['img'] = 'Загрузите фото в формате jpg, jpeg или png';
-		}
-		else if ($file_size > 2097152) {
-			$errors['img'] = 'Максимальный размер файла: 2МБ';
-		}
-		else {
-			move_uploaded_file($tmp_name, $file_path);
-			$lot['img'] = $file_path;
-		}		
-	}
-	else {
-		$errors['img'] = 'Вы не загрузили файл';
-	}	
+		        if ($file_type != "image/png" && $file_type != "image/jpeg") {
+		            $errors['img'] = 'Загрузите фото в формате JPG, JPEG или PNG';
+		        }
+		        else {
+		            move_uploaded_file($tmp_name, $file_path);
+		            $lot['img'] = $file_path;
+		        } 
+    			break;
 
+            case UPLOAD_ERR_INI_SIZE:   
+                $errors['img'] = 'Загрузка не удалась. Максимальный размер файла: 2МБ';
+                break;
+
+            case UPLOAD_ERR_NO_FILE:   
+                $errors['img'] = "Вы не загрузили файл";
+                break;    			
+    		
+    		default:
+    			$errors['img'] = "Ошибка загрузки файла"; 
+    			break;
+    	}
+    }
+
+
+    //Валидация всей формы
 	if (count($errors)) {
 		$content = render_template('view_add', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
 	}
