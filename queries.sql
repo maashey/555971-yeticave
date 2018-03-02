@@ -17,12 +17,12 @@ VALUES
 INSERT INTO lots (name, description, img_path, price, expiration, price_step, category_id, author_id)
 VALUES
   ('2014 Rossignol District Snowboard', 'Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив снег мощным щелчком и четкими дугами. Стекловолокно Bi-Ax,  уложенное в двух направлениях, наделяет этот снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом кэмбер позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется, просто посмотрите на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.',
-   'lot-1.jpg', 10999, '2018-03-10', 100, (SELECT id FROM categories WHERE name = 'Доски и лыжи'), 1),
-  ('DC Ply Mens 2016/2017 Snowboard', 'описание лота', 'lot-2.jpg', 159999, '2018-03-10', 1000, (SELECT id FROM categories WHERE name = 'Доски и лыжи'), 1),
-  ('Крепления Union Contact Pro 2015 года размер L/XL', 'описание лота', 'lot-3.jpg', 8000, '2018-03-10', 500, (SELECT id FROM categories WHERE name = 'Крепления'), 2),
-  ('Ботинки для сноуборда DC Mutiny Charocal', 'описание лота', 'lot-4.jpg', 109999, '2018-03-10', 1000, (SELECT id FROM categories WHERE name = 'Ботинки'), 2),
-  ('Куртка для сноуборда DC Mutiny Charocal', 'описание лота', 'lot-5.jpg', 7500, '2018-03-10', 200, (SELECT id FROM categories WHERE name = 'Одежда'), 3),
-  ('Маска Oakley Canopy', 'описание лота', 'lot-6.jpg', 5400, '2018-03-10', 250, (SELECT id FROM categories WHERE name = 'Разное'), 3);
+   'img/lot-1.jpg', 10999, '2018-03-10', 100, (SELECT id FROM categories WHERE name = 'Доски и лыжи'), 1),
+  ('DC Ply Mens 2016/2017 Snowboard', 'описание лота', 'img/lot-2.jpg', 159999, '2018-03-10', 1000, (SELECT id FROM categories WHERE name = 'Доски и лыжи'), 1),
+  ('Крепления Union Contact Pro 2015 года размер L/XL', 'описание лота', 'img/lot-3.jpg', 8000, '2018-03-10', 500, (SELECT id FROM categories WHERE name = 'Крепления'), 2),
+  ('Ботинки для сноуборда DC Mutiny Charocal', 'описание лота', 'img/lot-4.jpg', 109999, '2018-03-10', 1000, (SELECT id FROM categories WHERE name = 'Ботинки'), 2),
+  ('Куртка для сноуборда DC Mutiny Charocal', 'описание лота', 'img/lot-5.jpg', 7500, '2018-03-10', 200, (SELECT id FROM categories WHERE name = 'Одежда'), 3),
+  ('Маска Oakley Canopy', 'описание лота', 'img/lot-6.jpg', 5400, '2018-03-10', 250, (SELECT id FROM categories WHERE name = 'Разное'), 3);
 
 
 # Добавление ставок

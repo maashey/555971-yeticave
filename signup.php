@@ -22,23 +22,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     //Валидация файла
-    if (isset($_FILES['avatar']['name']) && $_FILES['avatar']['size'] >0) {
-        $tmp_name = $_FILES['avatar']['tmp_name'];
-        $file_name = $_FILES['avatar']['name'];
-        $avatar_path = 'img/'. $file_name;
-        $file_size = $_FILES['avatar']['size'];
-        $file_type = mime_content_type($tmp_name);
+    $file_message ='';
+    if (isset($_FILES['avatar'])) {
+        switch ($_FILES['avatar']['error']) {
+            case UPLOAD_ERR_OK:
+                $tmp_name = $_FILES['avatar']['tmp_name'];
+                $file_name = $_FILES['avatar']['name'];
+                $time = time();
+                $avatar_path = 'img/'. $time. '_' . $file_name;
+                $file_type = mime_content_type($tmp_name);
 
-        if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
-            $errors['avatar'] = 'Загрузите фото в формате jpg, jpeg или png';
-        }
-        else if ($file_size > 2097152) {
-            $errors['avatar'] = 'Максимальный размер файла: 2МБ';
-        }
-        else {
-            move_uploaded_file($tmp_name, $avatar_path);
+                if ($file_type != "image/png" && $file_type != "image/jpeg") {
+                    $errors['avatar'] = 'Загрузите фото в формате JPG, JPEG или PNG';
+                }
+                else {
+                    move_uploaded_file($tmp_name, $avatar_path);
+                } 
+                break;
+
+            case UPLOAD_ERR_INI_SIZE:   
+                $errors['avatar'] = 'Загрузка не удалась. Максимальный размер файла: 2МБ';
+                break;
+
+            case UPLOAD_ERR_NO_FILE:   
+                $file_message = "Вы не загрузили файл, но это и не обязательно";
+                break;
+
+            default: 
+                $errors['avatar'] = "Ошибка загрузки файла"; 
+                break; 
         }
     }
+
+
 
 
     // Проверка, что email нет в таблице users
@@ -53,16 +69,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errors['email'] = 'Пользователь с таким email уже существует';
             }
         } else {
-            $errors['db'] = mysqli_error($db);
+            $error_db = mysqli_error($db);
         }
     }
 
     //Валидация всей формы
     if (count($errors)) {
-        $content = render_template('view_signup',  ['form' => $form, 'errors' => $errors]);
+        $content = render_template('view_signup',  ['form' => $form, 'errors' => $errors, 'file_message' => $file_message ]);
     }
-    else if (isset($errors['db'])) {
-        $content = render_template('error', ['error' => $errors['db']]);
+    else if (isset($error_db)) {
+        $content = render_template('error', ['error' => $error_db]);
     }
     else {
         if(!isset($avatar_path)) {
@@ -77,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
         else {
-            $errors['db'] = mysqli_error($db);
-            $content = render_template('error', ['error' => $errors['db']]);
+            $error_db = mysqli_error($db);
+            $content = render_template('error', ['error' => $error_db]);
         }
     }
 } else {

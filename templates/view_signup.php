@@ -50,7 +50,7 @@
             <?= $errors['message'] ?? '' ;?>
         </span>
     </div>
-    <div class="form__item form__item--file form__item--last <?= isset($errors['img'])? 'form__item--invalid' : ''  ?>">
+    <div class="form__item form__item--file form__item--last <?= isset($errors['avatar'])? 'form__item--invalid' : ''  ?>">
         <label>Аватар</label>
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
@@ -65,7 +65,10 @@
             </label>
         </div>
         <span class="form__error">
-                <?= $errors['avatar'] ?? '' ;?>
+            <?= $errors['avatar'] ?? '' ;?>
+        </span>
+        <span style="color: #25434e; font-size: 11px; " >
+            <?= $file_message ?? '' ;?>
         </span>
     </div>
     <span class="form__error form__error--bottom">
