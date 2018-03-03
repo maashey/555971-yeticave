@@ -29,4 +29,4 @@ else {
 
 $content = render_template('view_index', ['lots' => $lots]);
 
-render_page($content, 'Главная', $categories );
+render_page($content, 'Главная', $categories , $is_index = true );

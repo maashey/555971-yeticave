@@ -1,27 +1,5 @@
-<nav class="nav">
-	<ul class="nav__list container">
-		<li class="nav__item">
-			<a href="all-lots.html">Доски и лыжи</a>
-		</li>
-		<li class="nav__item">
-			<a href="all-lots.html">Крепления</a>
-		</li>
-		<li class="nav__item">
-			<a href="all-lots.html">Ботинки</a>
-		</li>
-		<li class="nav__item">
-			<a href="all-lots.html">Одежда</a>
-		</li>
-		<li class="nav__item">
-			<a href="all-lots.html">Инструменты</a>
-		</li>
-		<li class="nav__item">
-			<a href="all-lots.html">Разное</a>
-		</li>
-	</ul>
-</nav>
 <?php if (isset($_SESSION['user'])) : ?>
-    <form class="form form--add-lot container <?= (isset($errors) && count($errors)>0 )? 'form--invalid' : '' ; ?>" action="add.php" method="post" enctype="multipart/form-data">
+    <form class="form form--add-lot <?= (isset($errors) && count($errors)>0 )? 'form--invalid' : '' ; ?>" action="add.php" method="post" enctype="multipart/form-data">
         <h2>Добавление лота</h2>
         <div class="form__container-two">
             <div class="form__item <?= isset($errors['name'])? 'form__item--invalid' : ''  ; ?>">

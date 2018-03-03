@@ -1,4 +1,4 @@
-<div class="container">
+<div>
     <header>
         <h2>Что-то пошло не так :(</h2>
     </header>
