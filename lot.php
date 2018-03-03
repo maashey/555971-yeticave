@@ -41,7 +41,7 @@ if (isset($_GET['id'])) {
         	//выбираем ставки лота
         	if ($lot['current_price'] > $lot['price']){
 
-	        	$query = "SELECT bets.sum as price, TIMESTAMPDIFF(MINUTE, bets.dt_add,  NOW()) as bet_time , users.name as user_name
+	        	$query = "SELECT bets.sum as price, TIMESTAMPDIFF(SECOND, bets.dt_add,  NOW()) as bet_time , users.name as user_name
 	        				FROM bets 
 	        				JOIN lots
 	        				ON bets.lot_id = lots.id

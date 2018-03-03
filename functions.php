@@ -74,18 +74,25 @@ function show_error(&$content, $error) {
 }
 
 //форматирование времени ставки
-function format_bet_time($minutes){
+function format_bet_time($seconds){
+    $minutes = floor($seconds/60);
+    $hours = floor($seconds/3600);
+    $days = floor($seconds/86400);
+//    if ($seconds<60){
+//        $res = $seconds.' сек. назад';
+//    }
+//    else 
     if ($minutes<60){
         $res = $minutes.' мин. назад';
     }
-    else if ($minutes>60 && $minutes<1440){
-        $res = floor($minutes/60).'ч.'. floor($minutes - (floor($minutes/60))*60).' мин. назад';
+    else if ($hours<24 && $minutes>=60){
+        $res = $hours.'ч.'. floor($minutes - $hours*60).'мин. назад';
     }
-    else if ($minutes>1440 && $minutes<10080){
-        $res = round($minutes/1440).' сут. назад';
+    else if ($days<7 && $hours>=24){
+        $res = $days.' сут. назад';
     }
     else{
-        $res = date("d.m.y", (time() - $minutes*60) );
+        $res = date("d.m.y", (time() - $seconds) );
     }
     return $res;
 }
