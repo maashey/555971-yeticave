@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 } 
 else 
 {
-	$content = render_template('view_add', ['categories' => $categories ]);
+	$content = render_template('view_add', []);
 }
 
 render_page($content, 'Добавление лота', $categories);

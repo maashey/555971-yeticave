@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
 	$lot_id = intval($_GET['id']);
 
     // запрос на показ лота по ID
-    $query = 'SELECT lots.name, lots.description, lots.img_path, lots.price, lots.expiration, lots.price_step,
+    $query = 'SELECT lots.id, lots.name, lots.description, lots.img_path, lots.price, lots.expiration, lots.price_step,
     			COALESCE( MAX(bets.sum), lots.price) as current_price, cat.name as category
     			FROM lots 
     			LEFT OUTER JOIN bets 
@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
 	        				ON bets.lot_id = lots.id
 	        				JOIN users
 	        				ON bets.user_id = users.id
-	        				WHERE bets.lot_id =". $lot_id ; //. "ORDER BY bet_time";
+	        				WHERE bets.lot_id =". $lot_id ." ORDER BY bet_time";
 
 	        	$result2 = mysqli_query($db, $query);			
 
