@@ -96,8 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             header("Location: lot.php?id=". $lot_id);
         }
         else {
-            $error = mysqli_error($db);
-            show_error($content, $error);
+            $content = render_template('error', ['error' => mysqli_error($db)]);
         }
     }
 } 

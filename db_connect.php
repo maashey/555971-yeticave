@@ -26,8 +26,7 @@ else {
         }
     }
     else {
-        $error = mysqli_error($db);
-        show_error($content, $error);
+        $content = render_template('error', ['error' => mysqli_error($db)]);
         render_page($content , 'Что-то пошло не так...', $categories);
     }
 }

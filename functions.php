@@ -64,12 +64,27 @@ function format_expiration($expiration) {
     else if ($diff<3600){
         $res = round($diff/60). ' мин.' ;
     }
-    return 
-    $res;
-    //strtotime($expiration).'  '. time() ;
+    return $res;
 }
 
 
 function show_error(&$content, $error) {
     $content = render_template('error', ['error' => $error]);
+}
+
+//форматирование времени ставки
+function format_bet_time($minutes){
+    if ($minutes<60){
+        $res = $minutes.' мин. назад';
+    }
+    else if ($minutes>60 && $minutes<1440){
+        $res = floor($minutes/60).'ч.'. floor($minutes - (floor($minutes/60))*60).' мин. назад';
+    }
+    else if ($minutes>1440 && $minutes<10080){
+        $res = round($minutes/1440).' сут. назад';
+    }
+    else{
+        $res = date("d.m.y", (time() - $minutes*60) );
+    }
+    return $res;
 }

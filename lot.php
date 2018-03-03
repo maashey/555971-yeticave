@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
         if (!isset($lot['name'])) {
             http_response_code(404);
             $error="Лот с этим id не найден";
-            show_error($content, $error);
+            $content = render_template('error', ['error' => $error]);
         }
         else {
         	//выбираем ставки лота
@@ -68,7 +68,7 @@ if (isset($_GET['id'])) {
         }
     }
     else {
-        show_error($content, mysqli_error($db));
+        $content = render_template('error', ['error' => mysqli_error($db)]);
     }
 }
 

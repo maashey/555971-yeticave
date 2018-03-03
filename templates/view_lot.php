@@ -49,7 +49,7 @@
                                         <?= format_price($bet['price']). 'р'; ?>
                                     </td>
                                     <td class="history__time">
-                                        <?= date($bet['bet_time'].' минут назад' ); ?>
+                                        <?= format_bet_time($bet['bet_time']); ?>
                                     </td>
                                 </tr>
                             <? } ?>
