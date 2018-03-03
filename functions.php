@@ -37,12 +37,13 @@ function esc($str) {
 
 
 //оборачивание контента в layout и вывод на экран
-function render_page($content, $title, $categories){
+function render_page($content, $title, $categories, $is_index=NULL){
 	$page = render_template('layout',
         [
             'content' => $content,
             'categories' => $categories,
-            'title' => $title
+            'title' => $title,
+            'is_index' => $is_index
         ]
     );
 	print($page);

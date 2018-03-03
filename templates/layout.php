@@ -47,9 +47,9 @@
     <? if (!isset($is_index)) { ?>
         <nav class="nav">
             <ul class="nav__list container">
-                <? foreach ($categories as $category) { ?>
+                <? foreach ($categories as $category_id => $category) { ?>
                     <li class="nav__item">
-                        <a href="all-lots.html"><?= $category; ?></a>
+                        <a href="index.php?category_id=<?=$category_id ?>"><?= $category; ?></a>
                     </li>
                 <? } ?>
             </ul>
@@ -63,9 +63,9 @@
     <footer class="main-footer">
         <nav class="nav">
             <ul class="nav__list container">
-                <? foreach ($categories as $category) { ?>
+                <? foreach ($categories as $category_id => $category) { ?>
                     <li class="nav__item">
-                        <a href="all-lots.html"><?= $category; ?></a>
+                        <a href="index.php?category_id=<?=$category_id ?>"><?= $category; ?></a>
                     </li>
                 <? } ?>
             </ul>
