@@ -24,13 +24,13 @@
                                 <span class="lot-item__cost"><?= format_price($lot['current_price']) ; ?></span>
                             </div>
                             <div class="lot-item__min-cost">
-                                Мин. ставка <span><?= format_price($lot['price_step']) ; ?> р</span>
+                                Мин. ставка <span><?= format_price($lot['min_bet']) ; ?> р</span>
                             </div>
                         </div>
                         <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
                             <p class="lot-item__form-item">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="number" name="cost" placeholder="12 000">
+                                <input id="cost" type="number" name="cost" placeholder="<?= format_price($lot['min_bet']) ; ?>">
                             </p>
                             <button type="submit" class="button">Сделать ставку</button>
                         </form>
@@ -43,13 +43,13 @@
                             <? foreach ($bets as $bet) { ?>
                                 <tr class="history__item">
                                     <td class="history__name">
-                                        <?= $bet['name']; ?>
+                                        <?= $bet['user_name']; ?>
                                     </td>
                                     <td class="history__price">
                                         <?= format_price($bet['price']). 'р'; ?>
                                     </td>
                                     <td class="history__time">
-                                        <?= date("d.m.y \в H:i",$bet['ts'] ); ?>
+                                        <?= date($bet['bet_time'].' минут назад' ); ?>
                                     </td>
                                 </tr>
                             <? } ?>

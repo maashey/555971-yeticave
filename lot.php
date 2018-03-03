@@ -18,14 +18,14 @@ if (isset($_GET['id'])) {
 	$lot_id = intval($_GET['id']);
 
     // запрос на показ лота по ID
-    $query = "SELECT lots.name, lots.description, lots.img_path, lots.price, lots.expiration, lots.price_step, 
+    $query = 'SELECT lots.name, lots.description, lots.img_path, lots.price, lots.expiration, lots.price_step,
     			COALESCE( MAX(bets.sum), lots.price) as current_price, cat.name as category
     			FROM lots 
     			LEFT OUTER JOIN bets 
     				ON lots.id = bets.lot_id 
     			JOIN categories cat 
     				ON lots.category_id = cat.id 
-    				WHERE lots.id =". $lot_id;
+    				WHERE lots.id ='. $lot_id;
 
     $result = mysqli_query($db, $query);    
 
@@ -38,8 +38,33 @@ if (isset($_GET['id'])) {
             show_error($content, $error);
         }
         else {
-            // передаем в шаблон результат выполнения
-            $content = render_template('view_lot', ['lot' => $lot] );
+        	//выбираем ставки лота
+        	if ($lot['current_price'] > $lot['price']){
+
+	        	$query = "SELECT bets.sum as price, TIMESTAMPDIFF(MINUTE, bets.dt_add,  NOW()) as bet_time , users.name as user_name
+	        				FROM bets 
+	        				JOIN lots
+	        				ON bets.lot_id = lots.id
+	        				JOIN users
+	        				ON bets.user_id = users.id
+	        				WHERE bets.lot_id =". $lot_id ; //. "ORDER BY bet_time";
+
+	        	$result2 = mysqli_query($db, $query);			
+
+	        	if ($result2){
+	        		$bets = mysqli_fetch_all($result2, MYSQLI_ASSOC);
+
+		            $lot['min_bet'] = $lot['current_price'] + $lot['price_step'];
+		            $content = render_template( 'view_lot', ['lot' => $lot, 'bets'=> $bets ] );	     
+	        	}
+	        	else{
+	        		$content = render_template('error', ['error' => mysqli_error($db)]);
+	        	}
+	        }
+	        else{
+	            $lot['min_bet'] = $lot['current_price'] + $lot['price_step'];
+	            $content = render_template( 'view_lot', ['lot' => $lot ] );
+        	}
         }
     }
     else {
