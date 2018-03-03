@@ -14,12 +14,12 @@
                 <label for="category">Категория</label>
                 <select id="category" name="category">
                     <option>Выберите категорию</option>
-                    <? foreach ($categories as $cat) {
-                        if ( isset($lot['category']) && ($cat==$lot['category']) ) { ?>
-                            <option <?= 'selected >'. $cat ;?></option>
-                        <? }else{ ?>
-                            <option><?= $cat ;?></option>
-                        <? } ?>
+                    <? foreach ($categories as $category_id => $category) {?>
+                            <option value="<?= $category_id ;?>"
+                                <?= (isset($lot['category']) && ($category_id == $lot['category']))? 'selected' : '' ?> 
+                            >
+                                <?= $category ;?>
+                            </option>
                     <? } ?>
                 </select>
                 <span class="form__error">

@@ -1,4 +1,5 @@
 <?php
+require_once('functions.php');
 require_once('mysql_helper.php');
 require_once 'dbconfig.php';
 
@@ -15,18 +16,18 @@ if (!$db) {
     render_page($content , 'Что-то пошло не так...', $categories);
 }
 else {
-    $query = 'SELECT `name` FROM categories ORDER BY `id`';
+    $query = 'SELECT * FROM categories ORDER BY `id`';
     $result = mysqli_query($db, $query);
 
     if ($result) {
         $result_arr = mysqli_fetch_all($result, MYSQLI_ASSOC);
         foreach ($result_arr as $r) {
-            $categories[] = $r['name'];
+            $categories[$r['id']] = $r['name'];
         }
     }
     else {
         $error = mysqli_error($db);
-        $content = render_template('error', ['error' => $error]);
+        show_error($content, $error);
         render_page($content , 'Что-то пошло не так...', $categories);
     }
 }

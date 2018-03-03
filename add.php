@@ -1,7 +1,7 @@
 <?php
 require_once('error_reporting.php');
 require_once('functions.php');
-require_once('data.php');
+require_once('db_connect.php');
 
 session_start();
 
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     // Проверка обязательных полей
 	foreach ($required as $field) {
-		if (empty($_POST[$field]) || strlen(trim($_POST[$field])) ==0  ) {
+		if (empty($_POST[$field]) || strlen(trim($_POST[$field])) == 0  ) {
             $errors[$field] = 'Поле не заполнено';
 		}
 	}
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		        $tmp_name = $_FILES['img']['tmp_name'];
 		        $file_name = $_FILES['img']['name'];
 		        $time = time();
-		        $file_path = 'img/'. $time. '_' . $file_name;
+		        $file_path = 'uploads/lots/'. $time. '_' . $file_name;
 		        $file_type = mime_content_type($tmp_name);
 
 		        if ($file_type != "image/png" && $file_type != "image/jpeg") {
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		        }
 		        else {
 		            move_uploaded_file($tmp_name, $file_path);
-		            $lot['img'] = $file_path;
+		            $lot['img_path'] = $file_path;
 		        } 
     			break;
 
@@ -82,13 +82,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
 
 
-    //Валидация всей формы
+    //Валидация всей формы и добавление данных в базу
 	if (count($errors)) {
 		$content = render_template('view_add', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
 	}
-	else {	
-		$content = render_template('view_lot', ['lot' => $lot, 'expiration' => $lot['expiration']]);
-	}	
+    else {
+        $query = 'INSERT INTO lots (name, description, img_path, price, expiration, price_step, category_id, author_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        $stmt = db_get_prepare_stmt($db, $query, [ $lot['name'], $lot['description'], $lot['img_path'], $lot['price'], $lot['expiration'], $lot['step'], $lot['category'], $_SESSION['user']['id'] ] );
+        $res = mysqli_stmt_execute($stmt);
+        if ($res) {
+            $lot_id = mysqli_insert_id($db);
+
+            header("Location: lot.php?id=". $lot_id);
+        }
+        else {
+            $error = mysqli_error($db);
+            show_error($content, $error);
+        }
+    }
 } 
 else 
 {

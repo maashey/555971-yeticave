@@ -44,7 +44,7 @@ SELECT lots.name, lots.price, lots.img_path,
   #максимальная ставка
   MAX(bets.sum) as max_bet,
   #текущая цена
-  GREATEST( COALESCE(MAX(bets.sum), 0) , lots.price) as current_price,
+  COALESCE(MAX(bets.sum), lots.price) as current_price,
   cat.name
 FROM lots
   LEFT OUTER JOIN bets

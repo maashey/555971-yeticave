@@ -68,3 +68,8 @@ function format_expiration($expiration) {
     $res;
     //strtotime($expiration).'  '. time() ;
 }
+
+
+function show_error(&$content, $error) {
+    $content = render_template('error', ['error' => $error]);
+}

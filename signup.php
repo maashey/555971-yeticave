@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $tmp_name = $_FILES['avatar']['tmp_name'];
                 $file_name = $_FILES['avatar']['name'];
                 $time = time();
-                $avatar_path = 'img/'. $time. '_' . $file_name;
+                $avatar_path = 'uploads/avatars/'. $time. '_' . $file_name;
                 $file_type = mime_content_type($tmp_name);
 
                 if ($file_type != "image/png" && $file_type != "image/jpeg") {
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $content = render_template('view_signup',  ['form' => $form, 'errors' => $errors, 'file_message' => $file_message ]);
     }
     else if (isset($error_db)) {
-        $content = render_template('error', ['error' => $error_db]);
+        show_error($content, $error_db);
     }
     else {
         if(!isset($avatar_path)) {
@@ -93,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
         else {
-            $error_db = mysqli_error($db);
-            $content = render_template('error', ['error' => $error_db]);
+            $error = mysqli_error($db);
+            show_error($content, $error);
         }
     }
 } else {
