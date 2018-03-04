@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //Аутентификация
     if (!count($errors)) {
-        $stmt = db_get_prepare_stmt($db, 'SELECT * FROM users WHERE email = ?', [$_POST['email']]);
+        $stmt = db_get_prepare_stmt($db, 'SELECT * FROM users WHERE email = ?', [strtolower($_POST['email']) ]);
         mysqli_stmt_execute($stmt);
         $res = mysqli_stmt_get_result($stmt);
         if ($res) {
@@ -38,17 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errors['email'] = 'Такой пользователь не найден';
             }
         } else {
-            $error_db = 'Ошибка БД: ' . mysqli_error($link);
+            $error_db = 'Ошибка БД: ' . mysqli_error($db);
         }
     }
 
 
-
-    if (count($errors)) {
-        $content = render_template('view_login', ['form' => $form, 'errors' => $errors]);
+    if (isset($error_db)) {
+        $content = render_template('error', ['error' => $error_db]);
     }
-    else if ($errors['db']) {
-        $page_content = render_template('error', ['error' => $errors['db']]);
+    else if (count($errors)) {
+        $content = render_template('view_login', ['form' => $form, 'errors' => $errors]);
     }
     else {
         header("Location: /index.php");
