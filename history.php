@@ -32,4 +32,4 @@ else {
     $content = render_template('error', ['error' => mysqli_error($db)]);
 }
 
-render_page($content, 'История просмотров', $categories );
+render_page($content, 'Просмотренные лоты', $categories );
