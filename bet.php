@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     header("Location: /lot.php?id=". $bet['lot_id'] ); 
                 }
                 else {
-                    $page_content = render_template('error', ['error' => mysqli_error($link)]);
+                    $content = render_template('error', ['error' => mysqli_error($db)]);
                 }
             }
 

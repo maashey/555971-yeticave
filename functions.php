@@ -5,7 +5,6 @@ function format_price($price) {
     $result=floatval($price); //переводим в число на всякий случай
     $result=ceil($result); //округляем до целого
     $result= number_format($result, 0, '', ' ');
-    //$result.= ' &#8381;'; //знак рубля у меня в браузере не работает. Знак подставляется картинкой в вёрстке lot__cost
     return $result;
 }
 
@@ -69,19 +68,11 @@ function format_expiration($expiration) {
 }
 
 
-function show_error(&$content, $error) {
-    $content = render_template('error', ['error' => $error]);
-}
-
 //форматирование времени ставки
 function format_bet_time($seconds){
     $minutes = floor($seconds/60);
     $hours = floor($seconds/3600);
     $days = floor($seconds/86400);
-//    if ($seconds<60){
-//        $res = $seconds.' сек. назад';
-//    }
-//    else 
     if ($minutes<60){
         $res = $minutes.' мин. назад';
     }

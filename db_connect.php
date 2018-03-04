@@ -1,7 +1,7 @@
 <?php
 require_once('functions.php');
 require_once('mysql_helper.php');
-require_once 'dbconfig.php';
+require_once ('dbconfig.php');
 
 //Подключаетмся к бд
 $db = mysqli_connect($dbconfig['host'], $dbconfig['user'], $dbconfig['password'], $dbconfig['database']);
