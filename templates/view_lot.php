@@ -48,7 +48,7 @@
                             <? foreach ($bets as $bet) { ?>
                                 <tr class="history__item">
                                     <td class="history__name">
-                                        <?= $bet['user_name']; ?>
+                                        <?= esc($bet['user_name']) ; ?>
                                     </td>
                                     <td class="history__price">
                                         <?= format_price($bet['price']). 'р'; ?>

@@ -21,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['email'] = 'Введите корректный email';
     }
 
+    $avatar_path = '';
+
     //Валидация файла
     $file_message ='';
     if (isset($_FILES['avatar'])) {
@@ -60,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Проверка, что email нет в таблице users
     if (!isset($errors['email'])) {
 
-        $stmt = db_get_prepare_stmt($db, 'SELECT email FROM users WHERE email = ?', [$_POST['email']]);
+        $stmt = db_get_prepare_stmt($db, 'SELECT email FROM users WHERE email = ?', [ strtolower($_POST['email']) ]);
         mysqli_stmt_execute($stmt);
 
         $res = mysqli_stmt_get_result($stmt);
@@ -78,12 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $content = render_template('view_signup',  ['form' => $form, 'errors' => $errors, 'file_message' => $file_message ]);
     }
     else if (isset($error_db)) {
-        show_error($content, $error_db);
+        $content = render_template('error', ['error' => $error_db] );
     }
     else {
-        if(!isset($avatar_path)) {
-            $avatar_path = '';
-        }
         $query = 'INSERT INTO users (email, name, password, avatar_path, contacts) VALUES (?, ?, ?, ?, ?)';
         $password = password_hash($form['password'], PASSWORD_DEFAULT);
         $stmt = db_get_prepare_stmt($db, $query, [ $form['email'], $form['name'], $password, $avatar_path, $form['message'] ]);
@@ -93,8 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
         else {
-            $error = mysqli_error($db);
-            show_error($content, $error);
+            $content = render_template('error', ['error' => mysqli_error($db)]);
         }
     }
 } else {
