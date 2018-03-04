@@ -5,11 +5,6 @@ require_once('db_connect.php');
 
 session_start();
 
-// Проверяем, что пользователь залогинен
-if(!isset($_SESSION['user'])) {
-    $page_content = render_template('error', ['error' => 'Залогиньтесь чтобы сделать ставку']);
-}
-
 //обработка формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
@@ -17,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	$bet['lot_id'] = intval($_POST['lot_id']);	
 	$min_bet = intval($_POST['min_bet']);
 
-	//валидация и проверка ставки 
-	if (!empty($_POST['cost']) && intval(trim($_POST['cost'])) >= $min_bet ) {
+	//валидация и проверка ставки, если пользователь авторизован
+	if ( isset($_SESSION['user']) && !empty($_POST['cost']) && intval(trim($_POST['cost'])) >= $min_bet ) {
 
 		$bet['sum'] = intval(trim($_POST['cost']));
     	$bet['user_id'] = $_SESSION['user']['id'];
@@ -28,18 +23,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         if ($result){
         	$lot = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-        	if (strtotime($lot['expiration']) < time()) {
-                $content = render_template('error',  ['error' => 'Срок действия лота истек']);
-                render_page($content , 'Добавление ставки', $categories);
+            //выбираем ставки лота
+            if ($lot['current_price'] > $lot['price']){
+                $query = "SELECT bets.sum as price, TIMESTAMPDIFF(SECOND, bets.dt_add,  NOW()) as bet_time , bets.user_id ,users.name as user_name
+	        				FROM bets 
+	        				JOIN lots
+	        				ON bets.lot_id = lots.id
+	        				JOIN users
+	        				ON bets.user_id = users.id
+	        				WHERE bets.lot_id =". $lot_id ." ORDER BY bet_time";
+                $result2 = mysqli_query($db, $query);
+
+                if ($result2){
+                    $bets = mysqli_fetch_all($result2, MYSQLI_ASSOC);
+                    $user_bet_exist = false;
+
+                    //проверяем делал ли пользователь ставки
+                    foreach ($bets as $bet){
+                        if(isset($_SESSION['user']) && $bet['user_id']==$_SESSION['user']['id']){
+                            $user_bet_exist = true;
+                            break;
+                        }
+                    }
+                 }
+                else{
+                    $content = render_template('error', ['error' => mysqli_error($db)]);
+                }
             }
-        	else if ($lot['author_id'] == $bet['user_id']) {
-                $content = render_template('error',  ['error' => 'Вы не можете добавить ставку на свой лот']);
-                render_page($content , 'Добавление ставки', $categories);
-            }            
-            else {
+
+            //если лот открыт, лот не создан пользователем и он еще не добавлял ставки, до добавляем ставку в таблицу
+            if (  strtotime($lot['expiration']) > time()  &&  $lot['author_id'] != $bet['user_id']  &&  !$user_bet_exist ) {
                 $query = 'INSERT INTO bets (sum, user_id, lot_id) VALUES ( ?, ?, ?)';
                 $stmt = db_get_prepare_stmt($db, $query, [$bet['sum'], $bet['user_id'], $bet['lot_id']]);
                 $res = mysqli_stmt_execute($stmt);
+                //показываем результат - страницу лота с добавленной ставкой или ошибку в случае ошибки
                 if ($res) {
                     header("Location: /lot.php?id=". $bet['lot_id'] ); 
                 }
@@ -54,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         	render_page($content , 'Добавление ставки', $categories);
         }
 	}
+	//если пользователь не авторизован или значение ставки не прошло валидацию, то показывает страницу лота без изменений
 	else{
 		header("Location: /lot.php?id=". $bet['lot_id'] ); 		
 	}

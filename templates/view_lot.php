@@ -26,7 +26,7 @@
                                 Мин. ставка <span><?= format_price($lot['min_bet']) ; ?> р</span>
                             </div>
                         </div>
-                <? if (isset($_SESSION['user'])) { ?>        
+                <? if ( $bet_message == '' ) { ?>
                         <form class="lot-item__form <?= isset($error_bet)? 'form__item--invalid' : ''  ; ?>" action="bet.php" method="post">
                             <p class="lot-item__form-item">
                                 <label for="cost">Ваша ставка</label>
@@ -38,6 +38,7 @@
                         </form>
                     </div>
                 <? } else { ?>
+                <div><br><b><?= $bet_message ;?></b></div>
                     </div> 
                 <? } ?>
                 <? if (isset($bets)) { ?>

@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
 	$lot_id = intval($_GET['id']);
 
     // запрос на показ лота по ID
-    $query = 'SELECT lots.id, lots.name, lots.description, lots.img_path, lots.price, lots.expiration, lots.price_step,
+    $query = 'SELECT lots.id, lots.author_id, lots.name, lots.description, lots.img_path, lots.price, lots.expiration, lots.price_step,
     			COALESCE( MAX(bets.sum), lots.price) as current_price, cat.name as category
     			FROM lots 
     			LEFT OUTER JOIN bets 
@@ -31,6 +31,8 @@ if (isset($_GET['id'])) {
 
     if ($result) {
     	$lot = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $lot['min_bet'] = $lot['current_price'] + $lot['price_step'];
+    	$bet_message=''; //если ставка не может быть добавлен, то будет показано это сообщение вместо блока добавления ставки
 
         if (!isset($lot['name'])) {
             http_response_code(404);
@@ -38,10 +40,20 @@ if (isset($_GET['id'])) {
             $content = render_template('error', ['error' => $error]);
         }
         else {
+            if (!isset($_SESSION['user'])){
+                $bet_message = 'Залогиньтесь, чтобы делать ставки';
+            }
+            else if (strtotime($lot['expiration']) < time() ){
+                $bet_message = 'Срок действия лота истёк';
+            }
+            else if ($lot['author_id'] == $_SESSION['user']['id'] ){
+                $bet_message = 'Вы не можете добавить ставку на свой лот';
+            }
+
         	//выбираем ставки лота
         	if ($lot['current_price'] > $lot['price']){
 
-	        	$query = "SELECT bets.sum as price, TIMESTAMPDIFF(SECOND, bets.dt_add,  NOW()) as bet_time , users.name as user_name
+	        	$query = "SELECT bets.sum as price, TIMESTAMPDIFF(SECOND, bets.dt_add,  NOW()) as bet_time , bets.user_id ,users.name as user_name
 	        				FROM bets 
 	        				JOIN lots
 	        				ON bets.lot_id = lots.id
@@ -54,16 +66,20 @@ if (isset($_GET['id'])) {
 	        	if ($result2){
 	        		$bets = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
-		            $lot['min_bet'] = $lot['current_price'] + $lot['price_step'];
-		            $content = render_template( 'view_lot', ['lot' => $lot, 'bets'=> $bets ] );	     
+		            foreach ($bets as $bet){
+		                if(isset($_SESSION['user']) && $bet['user_id']==$_SESSION['user']['id']){
+                            $bet_message = 'Вы уже делали ставку на этот лот';
+                            break;
+                        }
+                    }
+                    $content = render_template( 'view_lot', ['lot' => $lot, 'bets'=> $bets, 'bet_message' => $bet_message ] );
 	        	}
 	        	else{
 	        		$content = render_template('error', ['error' => mysqli_error($db)]);
 	        	}
 	        }
 	        else{
-	            $lot['min_bet'] = $lot['current_price'] + $lot['price_step'];
-	            $content = render_template( 'view_lot', ['lot' => $lot ] );
+	            $content = render_template( 'view_lot', ['lot' => $lot,  'bet_message' => $bet_message ] );
         	}
         }
     }
