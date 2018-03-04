@@ -1,11 +1,5 @@
 <?php
 
-//записываем в ассоциативный массив данные объявления
-function item_to_arr($id, $name, $cat, $price, $img, $description) {
-    return array('id'=> $id,'name'=> $name, 'category'=> $cat, 'price'=> $price, 'img'=> $img, 'description'=> $description);
-}
-
-
 //форматирование вывода цены 
 function format_price($price) {
     $result=floatval($price); //переводим в число на всякий случай
@@ -34,32 +28,71 @@ function render_template($template_name, $vars)
     return $result;
 }
 
-//фильтрация данных 
+
+//фильтрация данных для показа на странице
 function esc($str) {
 	$text = htmlspecialchars($str);
 	return $text;
 }
 
+
 //оборачивание контента в layout и вывод на экран
-function render_page($content, $title, $categories){
+function render_page($content, $title, $categories, $is_index=NULL){
 	$page = render_template('layout',
         [
             'content' => $content,
             'categories' => $categories,
-            'title' => $title
+            'title' => $title,
+            'is_index' => $is_index
         ]
     );
 	print($page);
 }
 
-function searchUserByEmail($email, $users) {
-    $result = null;
-    foreach ($users as $user) {
-        if ($user['email'] == $email) {
-            $result = $user;
-            break;
-        }
-    }
 
-    return $result;
+//расчёт и форматирование оставшегося времени до конца лота
+function format_expiration($expiration) {
+    $diff = strtotime($expiration) - time();
+    if ($diff>=604800){
+        $res = date("d.m.y", strtotime($expiration)) ; 
+    }
+    else if ($diff<604800 && $diff>=86400){
+        $res = round($diff/86400). ' д.' ;
+    }
+    else if ($diff<86400 && $diff>=3600){
+        $res = round($diff/3600). ' ч.' ;
+    }
+    else if ($diff<3600){
+        $res = round($diff/60). ' мин.' ;
+    }
+    return $res;
+}
+
+
+function show_error(&$content, $error) {
+    $content = render_template('error', ['error' => $error]);
+}
+
+//форматирование времени ставки
+function format_bet_time($seconds){
+    $minutes = floor($seconds/60);
+    $hours = floor($seconds/3600);
+    $days = floor($seconds/86400);
+//    if ($seconds<60){
+//        $res = $seconds.' сек. назад';
+//    }
+//    else 
+    if ($minutes<60){
+        $res = $minutes.' мин. назад';
+    }
+    else if ($hours<24 && $minutes>=60){
+        $res = $hours.'ч.'. floor($minutes - $hours*60).'мин. назад';
+    }
+    else if ($days<7 && $hours>=24){
+        $res = $days.' сут. назад';
+    }
+    else{
+        $res = date("d.m.y", (time() - $seconds) );
+    }
+    return $res;
 }
