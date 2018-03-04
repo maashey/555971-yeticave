@@ -13,7 +13,7 @@ CREATE TABLE categories (
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  email CHAR(255) BINARY NOT NULL,
+  email CHAR(255) NOT NULL,
   name  CHAR(255) NOT NULL,
   password CHAR(64) NOT NULL,
   avatar_path CHAR(255),
@@ -24,7 +24,7 @@ CREATE TABLE users (
 CREATE TABLE lots (
   id INT AUTO_INCREMENT PRIMARY KEY,
   dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  name CHAR(255) BINARY NOT NULL,
+  name CHAR(255) NOT NULL,
   description TEXT NOT NULL,
   img_path CHAR(255),
   price INT UNSIGNED NOT NULL,
@@ -52,3 +52,5 @@ CREATE TABLE bets (
   INDEX (lot_id),
   INDEX (user_id)
 );
+
+CREATE FULLTEXT INDEX lot_ft_search ON lots(name, description);

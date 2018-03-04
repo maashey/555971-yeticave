@@ -1,6 +1,6 @@
 <div class="container">
     <section class="lots">
-        <h2>История просмотров</h2>
+        <h2>Просмотренные лоты</h2>
         <ul class="lots__list">
             <? foreach($lots as $lot) { ?>
                 <li class="lots__item lot">

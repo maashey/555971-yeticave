@@ -1,9 +1,8 @@
-<section class="lots container">
-    <div class="lots__header">
-        <h2>Открытые лоты</h2>
-    </div>
-    <ul class="lots__list">
-        <? foreach($lots as $lot) { ?>
+<div class="container">
+    <section class="lots">
+        <h2><?=$title ;?></h2>
+        <ul class="lots__list">
+            <? foreach($lots as $lot) { ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
                         <img src="<?= $lot['img']; ?>" width="350" height="260" alt="<?= esc($lot['name']); ?>">
@@ -22,6 +21,15 @@
                         </div>
                     </div>
                 </li>
-        <? } ?>    
-    </ul>
-</section>
+            <? } ?>
+        </ul>
+    </section>
+<!--    <ul class="pagination-list">-->
+<!--        <li class="pagination-item pagination-item-prev"><a>Назад</a></li>-->
+<!--        <li class="pagination-item pagination-item-active"><a>1</a></li>-->
+<!--        <li class="pagination-item"><a href="#">2</a></li>-->
+<!--        <li class="pagination-item"><a href="#">3</a></li>-->
+<!--        <li class="pagination-item"><a href="#">4</a></li>-->
+<!--        <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>-->
+<!--    </ul>-->
+</div>
