@@ -86,10 +86,10 @@ function format_bet_time($seconds){
         $res = $minutes.' мин. назад';
     }
     else if ($hours<24 && $minutes>=60){
-        $res = $hours.'ч.'. floor($minutes - $hours*60).'мин. назад';
+        $res = $hours.' ч. назад';
     }
     else if ($days<7 && $hours>=24){
-        $res = $days.' сут. назад';
+        $res = $days.' дн. назад';
     }
     else{
         $res = date("d.m.y", (time() - $seconds) );
