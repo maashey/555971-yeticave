@@ -1,5 +1,4 @@
-<?
-require_once('error_reporting.php');
+<?php
 require_once('functions.php');
 require_once('db_connect.php');
 
@@ -57,11 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         $user_bet_exist = false;
 
                         //проверяем делал ли пользователь ставки
-                        foreach ($bets as $bet) {
-                            if (isset($_SESSION['user']) && $bet['user_id'] == $_SESSION['user']['id']) {
-                                $user_bet_exist = true;
-                                break;
-                            }
+                        if (isset($bet[$_SESSION['user']['id']])){
+                            $user_bet_exist = true;
                         }
                     } else {
                         $content = render_template('error', ['error' => mysqli_error($db)]);
@@ -81,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     }
                 }
             }
+
             //если ставка меньше минимальной, то показываем страницу лота без изменений
             else{
                 header("Location: /lot.php?id=". $bet['lot_id'] );
