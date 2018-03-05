@@ -49,7 +49,7 @@
                                         <?= esc($bet['user_name']) ; ?>
                                     </td>
                                     <td class="history__price">
-                                        <?= format_price($bet['price']). 'р'; ?>
+                                        <?= format_price($bet['price']). ' р'; ?>
                                     </td>
                                     <td class="history__time">
                                         <?= format_bet_time($bet['bet_time']); ?>

@@ -39,17 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             //если  ставка пользователя больше или равно минимальной ставке
             if ($bet['sum'] >= $min_bet ) {
-
+                $user_bet_exist = false;
                 //выбираем ставки лота, если текущая цена больше начальной
                 if ($lot['current_price'] > $lot['price']) {
 
-                    $query = "SELECT bets.sum as price, TIMESTAMPDIFF(SECOND, bets.dt_add,  NOW()) as bet_time , bets.user_id ,users.name as user_name
+                    $query = "SELECT bets.user_id 
                                 FROM bets 
                                 JOIN lots
                                 ON bets.lot_id = lots.id
                                 JOIN users
                                 ON bets.user_id = users.id
-                                WHERE bets.lot_id =" . $lot_id . " ORDER BY bet_time";
+                                WHERE bets.lot_id =" . $lot_id ;
                     $result2 = mysqli_query($db, $query);
 
                     if ($result2) {
