@@ -68,7 +68,7 @@ if (isset($_GET['id'])) {
 
 		            foreach ($bets as $bet){
 		                if(isset($_SESSION['user']) && $bet['user_id']==$_SESSION['user']['id']){
-                            $bet_message = 'Вы уже делали ставку на этот лот';
+                            $bet_message = 'Вы уже сделали ставку на этот лот';
                             break;
                         }
                     }

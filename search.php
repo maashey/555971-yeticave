@@ -28,5 +28,8 @@ if ($search != '') {
         $content = render_template('error', ['error' => mysqli_error($db)]);
     }
 }
+else{
+    header("Location:". $_SERVER['HTTP_REFERER']  );
+}
 
 render_page( $content, $title, $categories);
