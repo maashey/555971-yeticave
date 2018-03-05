@@ -29,6 +29,7 @@ if ($search != '') {
 }
 else{
     header("Location:". $_SERVER['HTTP_REFERER']  );
+    exit();
 }
 
 render_page( $content, $title, $categories);

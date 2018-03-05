@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     //показываем результат - страницу лота с добавленной ставкой или ошибку в случае ошибки
                     if ($res) {
                         header("Location: /lot.php?id=" . $bet['lot_id']);
+                        exit();
                     } else {
                         $content = render_template('error', ['error' => mysqli_error($db)]);
                     }
@@ -84,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             //если ставка меньше минимальной, то показываем страницу лота без изменений
             else{
                 header("Location: /lot.php?id=". $bet['lot_id'] );
+                exit();
             }
         }
         else{
@@ -93,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 	//если пользователь не авторизован или значение ставки не прошло валидацию, то показываем страницу лота без изменений
 	else{
-		header("Location: /lot.php?id=". $bet['lot_id'] ); 		
+		header("Location: /lot.php?id=". $bet['lot_id'] );
+		exit();
 	}
 }
 else

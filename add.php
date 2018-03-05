@@ -39,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			if ($value == 'Выберите категорию') {
 				$errors[$field] = 'Вы не выбрали категорию';
 			}
+            //проверка существования категории
+            else if (!isset($categories[$value])) {
+                $errors[$field] = 'Несуществующая категория';
+            }
 		}
 		if ($field == "expiration"){
 		    if (strtotime($value) < time() && !isset($errors[$field])) {
@@ -95,22 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$content = render_template('view_add', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
 	}
     else {
-	    //проверка существования категории
-        if (isset($categories[$lot['category']])) {
-            $query = 'INSERT INTO lots (name, description, img_path, price, expiration, price_step, category_id, author_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($db, $query, [ $lot['name'], $lot['description'], $lot['img_path'], $lot['price'], $lot['expiration'], $lot['step'], $lot['category'], $_SESSION['user']['id'] ] );
-            $res = mysqli_stmt_execute($stmt);
-            if ($res) {
-                $lot_id = mysqli_insert_id($db);
+        $query = 'INSERT INTO lots (name, description, img_path, price, expiration, price_step, category_id, author_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        $stmt = db_get_prepare_stmt($db, $query, [ $lot['name'], $lot['description'], $lot['img_path'], $lot['price'], $lot['expiration'], $lot['step'], $lot['category'], $_SESSION['user']['id'] ] );
+        $res = mysqli_stmt_execute($stmt);
+        if ($res) {
+            $lot_id = mysqli_insert_id($db);
 
-                header("Location: lot.php?id=". $lot_id);
-            }
-            else {
-                $content = render_template('error', ['error' => mysqli_error($db)]);
-            }
-        } else {
-            $wrong_category = 'Ошибка добавления лота: неизвестная категория';
-            $content = render_template('error', ['error' => $wrong_category]);
+            header("Location: lot.php?id=". $lot_id);
+            exit();
+        }
+        else {
+            $content = render_template('error', ['error' => mysqli_error($db)]);
         }
     }
 } 
