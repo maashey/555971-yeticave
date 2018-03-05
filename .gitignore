@@ -7,5 +7,3 @@
 *.sublime*
 Thumbs.db
 vendor
-dbconfig.php
-test.php

@@ -1,5 +1,4 @@
 <?php
-require_once('error_reporting.php');
 require_once('functions.php');
 require_once('db_connect.php');
 

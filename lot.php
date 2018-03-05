@@ -1,5 +1,4 @@
 <?php
-require_once('error_reporting.php');
 require_once('functions.php');
 require_once('db_connect.php');
 
@@ -66,8 +65,9 @@ if (isset($_GET['id'])) {
 	        	if ($result2){
 	        		$bets = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
-		            foreach ($bets as $bet){
-		                if(isset($_SESSION['user']) && $bet['user_id']==$_SESSION['user']['id']){
+	        		//проверяем делал ли пользователь ставки на этот лот
+                    foreach ($bets as $bet){
+                        if(isset($_SESSION['user']) && $bet['user_id']==$_SESSION['user']['id']){
                             $bet_message = 'Вы уже сделали ставку на этот лот';
                             break;
                         }
