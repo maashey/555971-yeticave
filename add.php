@@ -55,7 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		        $tmp_name = $_FILES['img']['tmp_name'];
 		        $file_name = $_FILES['img']['name'];
 		        $time = time();
-		        $file_path = 'uploads/lots/'. $time. '_' . $file_name;
+		        $dir = 'uploads/lots/';
+                if(!is_dir($dir)) {
+                    mkdir($dir) ;
+                }
+		        $file_path = $dir. $time. '_' . $file_name;
 		        $file_type = mime_content_type($tmp_name);
 
 		        if ($file_type != "image/png" && $file_type != "image/jpeg") {
@@ -63,7 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		        }
 		        else {
 		            move_uploaded_file($tmp_name, $file_path);
-		            $lot['img_path'] = $file_path;
+                    if (!is_file($file_path)){
+                        $errors['img'] = "Ошибка сохранения файла";
+                    }
+                    else {
+                        $lot['img_path'] = $file_path;
+                    }
 		        } 
     			break;
 
@@ -87,16 +96,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$content = render_template('view_add', ['lot' => $lot, 'errors' => $errors, 'dict' => $dict, 'categories' => $categories]);
 	}
     else {
-        $query = 'INSERT INTO lots (name, description, img_path, price, expiration, price_step, category_id, author_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        $stmt = db_get_prepare_stmt($db, $query, [ $lot['name'], $lot['description'], $lot['img_path'], $lot['price'], $lot['expiration'], $lot['step'], $lot['category'], $_SESSION['user']['id'] ] );
-        $res = mysqli_stmt_execute($stmt);
-        if ($res) {
-            $lot_id = mysqli_insert_id($db);
+	    //проверка существования категории
+        if (isset($categories[$lot['category']])) {
+            $query = 'INSERT INTO lots (name, description, img_path, price, expiration, price_step, category_id, author_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+            $stmt = db_get_prepare_stmt($db, $query, [ $lot['name'], $lot['description'], $lot['img_path'], $lot['price'], $lot['expiration'], $lot['step'], $lot['category'], $_SESSION['user']['id'] ] );
+            $res = mysqli_stmt_execute($stmt);
+            if ($res) {
+                $lot_id = mysqli_insert_id($db);
 
-            header("Location: lot.php?id=". $lot_id);
-        }
-        else {
-            $content = render_template('error', ['error' => mysqli_error($db)]);
+                header("Location: lot.php?id=". $lot_id);
+            }
+            else {
+                $content = render_template('error', ['error' => mysqli_error($db)]);
+            }
+        } else {
+            $wrong_category = 'Ошибка добавления лота: неизвестная категория';
+            $content = render_template('error', ['error' => $wrong_category]);
         }
     }
 } 

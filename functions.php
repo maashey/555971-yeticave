@@ -83,7 +83,7 @@ function format_bet_time($seconds){
         $res = $days.' дн. назад';
     }
     else{
-        $res = date("d.m.y", (time() - $seconds) );
+        $res = date("d.m.y \в H:i", (time() - $seconds) );
     }
     return $res;
 }

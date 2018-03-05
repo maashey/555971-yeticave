@@ -31,7 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $tmp_name = $_FILES['avatar']['tmp_name'];
                 $file_name = $_FILES['avatar']['name'];
                 $time = time();
-                $avatar_path = 'uploads/avatars/'. $time. '_' . $file_name;
+                $dir = 'uploads/avatars/';
+                if(!is_dir($dir)) {
+                   mkdir($dir) ;
+                }
+                $avatar_path = $dir. $time. '_' . $file_name;
                 $file_type = mime_content_type($tmp_name);
 
                 if ($file_type != "image/png" && $file_type != "image/jpeg") {
@@ -39,6 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 else {
                     move_uploaded_file($tmp_name, $avatar_path);
+                    if (!is_file($avatar_path)){
+                        $errors['avatar'] = "Ошибка сохранения файла";
+                    }
                 } 
                 break;
 

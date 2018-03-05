@@ -31,8 +31,6 @@
                             <p class="lot-item__form-item">
                                 <label for="cost">Ваша ставка</label>
                                 <input id="cost" type="number" name="cost" placeholder="<?= format_price($lot['min_bet']) ; ?>">
-                                <input type="hidden" name="lot_id" value="<?=$lot['id'];?>">
-                                <input type="hidden" name="min_bet" value="<?=$lot['min_bet'];?>">
                             </p>
                             <button type="submit" class="button">Сделать ставку</button>
                         </form>
