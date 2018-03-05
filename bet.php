@@ -56,8 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         $user_bet_exist = false;
 
                         //проверяем делал ли пользователь ставки
-                        if (isset($bet[$_SESSION['user']['id']])){
-                            $user_bet_exist = true;
+                        foreach ($bets as $bet){
+                            if($bet['user_id']==$_SESSION['user']['id']){
+                                $user_bet_exist = true;
+                                break;
+                            }
                         }
                     } else {
                         $content = render_template('error', ['error' => mysqli_error($db)]);
