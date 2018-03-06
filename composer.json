@@ -1,0 +1,15 @@
+{
+    "name": "maashey/yeticave",
+    "description": "website online auction",
+    "type": "project",
+		"authors": [
+			{
+				"name": "maashey",
+				"email": "mbalueva@gmail.com"
+			}
+		],    
+    "license": "free",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}

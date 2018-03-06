@@ -1,6 +1,8 @@
 <?php
+require_once('vendor/autoload.php');
 require_once('functions.php');
 require_once('db_connect.php');
+require_once('getwinner.php');
 
 date_default_timezone_set("Europe/Moscow");
 
