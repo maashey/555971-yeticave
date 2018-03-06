@@ -6,8 +6,6 @@ require_once('getwinner.php');
 
 date_default_timezone_set("Europe/Moscow");
 
-session_start();
-
 //показ лотов внутри категории
 if (isset($_GET['category_id'])){
     $is_index = NULL;
